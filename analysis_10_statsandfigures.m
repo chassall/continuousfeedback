@@ -707,7 +707,7 @@ rewERP = meanBeta(:,betaI{1},:);
 % Reward Plot
 makefigure(8,7);
 rewDispWin = [-2 1.5];
-sps{1} = subplot(2,3,1:3);
+sps{1} = subplot(2,4,1:4);
 % plot(rewTimes,rewERP(:,:,iRew), 'LineWidth',lineWidth); box off; hold on;
 plot(rewTimes,mean(rewERP(:,:,iRews),3), 'LineWidth',lineWidth); box off; hold on;
 ax = gca;
@@ -737,7 +737,7 @@ topoLimits = [-maxTopo maxTopo];
 
 titles = {'high','medium','low'};
 for i = 1:3
-    subplot(2,3,3+i);
+    subplot(2,4,4+i);
     tp2 = topoplot(meanRewERP(i,:),EEG.chanlocs, 'maplimits',topoLimits,'electrodes','off','headrad','rim','shading','interp','whitebk','on','style','fill');
     tp2.Parent.XLim = [-0.6 0.6];
     tp2.Parent.YLim = [-0.6 0.6];
@@ -750,8 +750,24 @@ for i = 1:3
     t.FontSize = fontSize;
     t.FontName = fontName;
     t.FontWeight = 'normal';
-    t.Position(2) = -0.8;
+    t.Position(2) = -0.9;
 end
+
+% High-low difference topography (revision 1)
+subplot(2,4,8);
+highMinusLowDiff =  meanRewERP(1,:) - meanRewERP(3,:);
+tp3 = topoplot(highMinusLowDiff,EEG.chanlocs,'electrodes','off','headrad','rim','shading','interp','whitebk','on','style','fill');
+tp3.Parent.XLim = [-0.6 0.6];
+tp3.Parent.YLim = [-0.6 0.6];
+colormap(myColormap);
+set(gca,'FontSize',fontSize);
+set(gca,'FontName',fontName);
+set(gca,'Box','off');
+t = title('high-low');
+t.FontSize = fontSize;
+t.FontName = fontName;
+t.FontWeight = 'normal';
+t.Position(2) = -0.9;
 
 print(fullfile(figuresFolder,'fig_03_rerpsbycondition.tiff'),'-dtiff','-r600');
 data = permute(rewBeta,[2,1,4,3]);
